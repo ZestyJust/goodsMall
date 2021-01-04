@@ -33,3 +33,10 @@ export class Shop {
         this.goodsCount = shopInfo.cGoods
     }
 }
+
+export class Params {
+    constructor(info, rule) {
+        this.sets = info.set;
+        this.tasizes = rule.tables
+    }
+}

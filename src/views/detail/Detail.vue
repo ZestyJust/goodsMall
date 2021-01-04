@@ -5,100 +5,8 @@
       <detail-swiper :topImages="topImages"></detail-swiper>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
-      <ul>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-        <li>text</li>
-      </ul>
+      <detail-goods-info :detailInfo="detailInfo" />
+      <detail-params-info :params="params" />
     </scroll>
   </div>
 </template>
@@ -108,10 +16,12 @@ import DetailNavBar from "./childComps/DetailNavBar";
 import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
+import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
+import DetailParamsInfo from "./childComps/DetailParamsInfo.vue";
 
 import Scroll from "components/common/scroll/Scroll.vue";
 
-import { getDetail, Goods, Shop } from "network/detail";
+import { getDetail, Goods, Shop, Params } from "network/detail";
 
 export default {
   name: "Detail",
@@ -121,6 +31,8 @@ export default {
     DetailBaseInfo,
     DetailShopInfo,
     Scroll,
+    DetailGoodsInfo,
+    DetailParamsInfo,
   },
   data() {
     return {
@@ -128,6 +40,8 @@ export default {
       topImages: [],
       goods: {},
       shop: {},
+      detailInfo: {},
+      params: {},
     };
   },
   created() {
@@ -142,6 +56,11 @@ export default {
         res.result.shopInfo.services
       );
       this.shop = new Shop(res.result.shopInfo);
+      this.detailInfo = res.result.detailInfo;
+      this.params = new Params(
+        res.result.itemParams.info,
+        res.result.itemParams.rule
+      );
     });
   },
 };
