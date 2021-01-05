@@ -36,6 +36,8 @@ export default {
   methods: {
     itemClick(index) {
       this.currentIndex = index;
+      console.log(this.currentIndex);
+      this.$emit("itemClick", index);
     },
     back() {
       this.$router.back();

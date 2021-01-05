@@ -38,6 +38,9 @@ export default {
 </script>
 
 <style  scoped>
+.params-info {
+  border-bottom: 5px solid #f2f5f8;
+}
 .params-size,
 .params-sets {
   padding: 0 10px;

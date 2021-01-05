@@ -71,7 +71,16 @@ export default {
       isShowBackTop: false,
       taboffsetTop: 0,
       isShowTab: false,
+      saveY: 0,
     };
+  },
+  activated() {
+    this.$refs.scroll.scroll.scrollTo(0, this.saveY, 20);
+    this.$refs.scroll.scroll.refresh();
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.scroll.y;
+    console.log(this.saveY);
   },
   created() {
     /* 1.请求多个数据(网络) */
