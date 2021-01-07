@@ -80,7 +80,6 @@ export default {
   },
   deactivated() {
     this.saveY = this.$refs.scroll.scroll.y;
-    console.log(this.saveY);
   },
   created() {
     /* 1.请求多个数据(网络) */
@@ -126,7 +125,6 @@ export default {
 
     getHomeMultidata() {
       getHomeMultidata().then((res) => {
-        // console.log(res.data.recommend.list);
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
       });
@@ -134,7 +132,6 @@ export default {
     getHomeGoods(type) {
       const page = this.goods[type].page + 1;
       getHomeGoods(type, page).then((res) => {
-        // console.log(res);
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
         this.$refs.scroll.scroll.finishPullUp();

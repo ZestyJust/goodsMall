@@ -1,12 +1,8 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav" @itemClick="navClick" ref="navBar" />
-    <scroll
-      class="detail-content"
-      ref="scroll"
-      @scroll="detailScroll"
-      :probeType="3"
-    >
+
+    <scroll class="content" ref="scroll" @scroll="detailScroll" :probeType="3">
       <detail-swiper :topImages="topImages"></detail-swiper>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -15,6 +11,8 @@
       <detail-comment-info ref="comment" :commentInfo="commentInfo" />
       <goods-list ref="recommend" :goods="recommend" />
     </scroll>
+    <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <detail-down-bar @addToCart="addToCart" />
   </div>
 </template>
 
@@ -26,9 +24,11 @@ import DetailShopInfo from "./childComps/DetailShopInfo";
 import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
 import DetailParamsInfo from "./childComps/DetailParamsInfo";
 import DetailCommentInfo from "./childComps/DetailCommentInfo";
+import DetailDownBar from "./childComps/DetailDownBar";
 
 import Scroll from "components/common/scroll/Scroll.vue";
 import GoodsList from "components/content/goods/GoodsList";
+import BackTop from "components/content/backTop/BackTop";
 
 import { getDetail, getrecommend, Goods, Shop, Params } from "network/detail";
 
@@ -44,6 +44,8 @@ export default {
     DetailParamsInfo,
     DetailCommentInfo,
     GoodsList,
+    BackTop,
+    DetailDownBar,
   },
   data() {
     return {
@@ -57,13 +59,14 @@ export default {
       recommend: [],
       clickToY: [],
       currindex: 0,
+      isShowBackTop: false,
+      taboffsetTop: 1500,
     };
   },
   created() {
     this.iid = this.$route.params.iid;
 
     getDetail(this.iid).then((res) => {
-      console.log(res);
       this.topImages = res.result.itemInfo.topImages;
       this.goods = new Goods(
         res.result.itemInfo,
@@ -80,7 +83,6 @@ export default {
     });
 
     getrecommend().then((res) => {
-      console.log(res);
       this.recommend = res.data.list;
     });
   },
@@ -91,15 +93,14 @@ export default {
       this.clickToY.push(this.$refs.comment.$el.offsetTop);
       this.clickToY.push(this.$refs.recommend.$el.offsetTop);
       this.clickToY.push(Number.MAX_VALUE);
-      console.log(this.clickToY);
-    }, 2000);
+    }, 500);
   },
   methods: {
     navClick(index) {
-      console.log(index);
       return this.$refs.scroll.scroll.scrollTo(0, -this.clickToY[index], 300);
     },
     detailScroll(position) {
+      this.isShowBackTop = -position.y > 1000;
       const positionY = -position.y;
       for (let i = 0; i < this.clickToY.length - 1; i++) {
         if (
@@ -108,11 +109,23 @@ export default {
           positionY <= this.clickToY[i + 1]
         ) {
           this.currindex = i;
-          console.log(i);
-          console.log(this.currindex);
           this.$refs.navBar.currentIndex = this.currindex;
         }
       }
+    },
+    // 监听返回顶部按钮
+    backClick() {
+      this.$refs.scroll.scroll.scrollTo(0, 0, 500);
+    },
+    // 监听加入购物车
+    addToCart() {
+      const product = {};
+      product.iid = this.iid;
+      product.image = this.topImages[0];
+      product.desc = this.goods.desc;
+      product.title = this.goods.title;
+      product.price = this.goods.lowNowPrice;
+      this.$store.commit("addCartList", product);
     },
   },
 };
@@ -124,10 +137,10 @@ export default {
   background-color: #fff; */
   height: 100vh;
 }
-.detail-content {
+.content {
   position: absolute;
   top: 44px;
-  bottom: 0px;
+  bottom: 49px;
   left: 0;
   right: 0;
   overflow: hidden;

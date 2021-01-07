@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-bar>
+    <nav-bar class="nav-bar">
       <div class="back" slot="left" @click="back">
         <img src="@/assets/img/common/back.svg" alt="" />
       </div>
@@ -36,7 +36,6 @@ export default {
   methods: {
     itemClick(index) {
       this.currentIndex = index;
-      console.log(this.currentIndex);
       this.$emit("itemClick", index);
     },
     back() {
@@ -47,6 +46,9 @@ export default {
 </script>
 
 <style  scoped>
+.nav-bar {
+  height: 44px;
+}
 .item {
   display: flex;
   font-size: 13px;
@@ -55,7 +57,7 @@ export default {
   flex: 1;
 }
 .active {
-  color: rgb(167, 26, 26);
+  color: rgb(255, 0, 0);
 }
 .back img {
   margin-top: 12px;
